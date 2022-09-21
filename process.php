@@ -47,6 +47,9 @@
 
 
                     $number_of_attributes++;
+                    
+                    if($linha_arquivo+1>=count($conteudo_arquivo))
+                        break;    
                     $linha_arquivo++;
                 }while(
                     strlen($conteudo_arquivo[$linha_arquivo])>0 &&
