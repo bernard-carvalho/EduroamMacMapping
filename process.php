@@ -1,4 +1,5 @@
 <?php
+    echo "[";
     $file_name = "detail-20220915";
     $vetor_entradas=array();
     $vetor_comandos=array();
@@ -11,10 +12,50 @@
         //condicional para verificar se a linha do arquivo não esta vazia, representando um atributo ou a criação de uma nova entrada
             if($conteudo_arquivo[$linha_arquivo][0]!="\t"){
                 //nova entrada
-                echo $conteudo_arquivo[$linha_arquivo]."\n";
-                echo $number_of_entry++.":["."\n";
+                //echo $conteudo_arquivo[$linha_arquivo]."\n";
+                if($number_of_entry!=0)
+                    echo "},\n";
+                //echo 
+                $number_of_entry++;
+                echo "{"."\n";
+                $number_of_attributes=0;
+                do{
+
+                    if($linha_arquivo>=count($conteudo_arquivo))
+                        break;
+                    if(strlen($conteudo_arquivo[$linha_arquivo])==0)
+                        break;
+                    
+                    $attribute = $conteudo_arquivo[$linha_arquivo];
+                    if($number_of_attributes==0)
+                    {
+                        $attribute_name = "\"date\"";
+                        $attribute_value = "\"".$conteudo_arquivo[$linha_arquivo]."\"";
+                        echo $attribute_name.":".$attribute_value."\n";
+                    }
+                    else
+                    {
+                        echo ",";
+                        $attribute_name = "\"".trim(explode("=",substr($attribute,1))[0])."\"";
+                        $attribute_value = "";
+                        if(strlen(explode("\"",trim(explode("=",substr($attribute,1))[1]))[0])!=0)
+                            $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[0]."\"";
+                        else
+                            $attribute_value = "\"".explode("\"",trim(explode("=",substr($attribute,1))[1]))[1]."\"";
+                        echo $attribute_name.":".$attribute_value."\n";
+                    }
+
+
+                    $number_of_attributes++;
+                    $linha_arquivo++;
+                }while(
+                    strlen($conteudo_arquivo[$linha_arquivo])>0 &&
+                    $conteudo_arquivo[$linha_arquivo][0]=="\t" &&
+                    $linha_arquivo < count($conteudo_arquivo)
+                );
             }
         }//if(strlen($conteudo_arquivo[$linha_arquivo])==0)
-    }//for($linha_arquivo=0;$$linha_arquivo<count($result);$linha_arquivo++)
+    }//for($linha_arquivo=0;$linha_arquivo<count($result);$linha_arquivo++)
+    echo "}]";
 
 ?>
